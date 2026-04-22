@@ -3,7 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 
-// 🔐 Protected Route
+// 🔒 Protected Route
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/" />;
@@ -13,12 +13,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* Public */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected */}
+        {/* Protected Dashboard */}
         <Route
           path="/dashboard"
           element={
@@ -27,7 +25,6 @@ function App() {
             </PrivateRoute>
           }
         />
-
       </Routes>
     </BrowserRouter>
   );

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import "./Login.css";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function Login() {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -14,74 +15,72 @@ function Login() {
         password,
       });
 
+      // token save
       localStorage.setItem("token", res.data.token);
-      alert("Login Successful");
+      localStorage.setItem("email", email);
 
+      alert("Login Success ✅");
+
+      // dashboard redirect
       navigate("/dashboard");
     } catch (err) {
-      alert(err.response?.data || "Error");
+      alert(err.response?.data || "Login Failed ❌");
     }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1>🚀 MERN Auth</h1>
+    <div className="main">
+      <div className="container">
+        
+        {/* LEFT */}
+        <div className="left">
+          <h2>✨ SYNTH.AI</h2>
 
-        <input
-          placeholder="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={styles.input}
-        />
+          <h1>Welcome Back</h1>
+          <p>Enter your email and password to access</p>
 
-        <input
-          type="password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={styles.input}
-        />
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <button onClick={handleLogin} style={styles.btn}>
-          Login
-        </button>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <p>
-          Don't have account? <Link to="/register">Register</Link>
-        </p>
+          <div className="options">
+            <label>
+              <input type="checkbox" /> Keep me login
+            </label>
+            <span>Forget password?</span>
+          </div>
+
+          {/* 🔥 IMPORTANT */}
+          <button onClick={handleLogin}>Login</button>
+
+          <p className="register" onClick={() => navigate("/register")}>
+            Don't have an account? <span>Register</span>
+          </p>
+        </div>
+
+        {/* RIGHT */}
+        <div className="right">
+          <h1>What Can I Help You!</h1>
+          <p>I'm here to understand your needs.</p>
+
+          <div className="chat-box">
+            Ask me anything......
+          </div>
+        </div>
+
       </div>
     </div>
   );
-}
-
-const styles = {
-  container: {
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "linear-gradient(135deg, #667eea, #764ba2)",
-  },
-  card: {
-    background: "#fff",
-    padding: "30px",
-    borderRadius: "10px",
-    textAlign: "center",
-    width: "300px",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    margin: "10px 0",
-  },
-  btn: {
-    width: "100%",
-    padding: "10px",
-    background: "#667eea",
-    color: "#fff",
-    border: "none",
-  },
 };
 
 export default Login;

@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.main {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #5f2c82, #0f0c29);
+}
+
+.container {
+  display: flex;
+  width: 900px;
+  height: 500px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* LEFT */
+.left {
+  width: 45%;
+  padding: 40px;
+  color: white;
+}
+
+.left h1 {
+  margin: 10px 0;
+}
+
+.left input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.left button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #a855f7, #6366f1);
+  color: white;
+  cursor: pointer;
+}
+
+.register span {
+  color: #a855f7;
+  cursor: pointer;
+}
+
+/* RIGHT */
+.right {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background: radial-gradient(circle, #7c3aed, #4c1d95);
+}
+
+.chat-box {
+  margin-top: 20px;
+  padding: 20px;
+  width: 70%;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+}

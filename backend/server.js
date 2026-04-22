@@ -13,9 +13,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// ✅ MongoDB connect
+// ✅ MongoDB Connect
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
+  .then(() => console.log("MongoDB Connected ✅"))
   .catch(err => console.log(err));
 
 // ✅ User Model
@@ -28,7 +28,7 @@ const User = mongoose.model("User", new mongoose.Schema({
 // 🔥 TEST ROUTE
 // ==========================
 app.get("/", (req, res) => {
-  res.send("Backend Running");
+  res.send("Backend Running 🚀");
 });
 
 
@@ -36,8 +36,6 @@ app.get("/", (req, res) => {
 // 🔥 REGISTER
 // ==========================
 app.post("/register", async (req, res) => {
-  console.log("REGISTER HIT");
-
   try {
     let { email, password } = req.body;
 
@@ -56,12 +54,12 @@ app.post("/register", async (req, res) => {
 
     const user = new User({
       email,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
     await user.save();
 
-    res.json("User Registered");
+    res.json("User Registered Successfully ✅");
 
   } catch (err) {
     res.status(500).json(err.message);
@@ -73,8 +71,6 @@ app.post("/register", async (req, res) => {
 // 🔥 LOGIN
 // ==========================
 app.post("/login", async (req, res) => {
-  console.log("LOGIN HIT");
-
   try {
     let { email, password } = req.body;
 
@@ -104,7 +100,10 @@ app.post("/login", async (req, res) => {
 
     res.json({
       message: "Login successful",
-      token
+      token,
+      user: {
+        email: user.email,
+      },
     });
 
   } catch (err) {
@@ -114,19 +113,19 @@ app.post("/login", async (req, res) => {
 
 
 // ==========================
-// 🔐 AUTH MIDDLEWARE
+// 🔐 VERIFY TOKEN
 // ==========================
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return res.status(401).json("Access denied");
+    return res.status(401).json("Access denied ❌");
   }
 
   const token = authHeader.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json("No token provided");
+    return res.status(401).json("No token provided ❌");
   }
 
   try {
@@ -138,13 +137,31 @@ const verifyToken = (req, res, next) => {
     req.user = verified;
     next();
   } catch (err) {
-    res.status(400).json("Invalid token");
+    res.status(400).json("Invalid token ❌");
   }
 };
 
 
 // ==========================
-// 🔥 PROTECTED ROUTE
+// 🔥 PROFILE (REAL DATA)
+// ==========================
+app.get("/profile", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    res.json({
+      email: user.email,
+      id: user._id
+    });
+
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+});
+
+
+// ==========================
+// 🔥 DASHBOARD
 // ==========================
 app.get("/dashboard", verifyToken, (req, res) => {
   res.json("Welcome to Dashboard 🔐");
@@ -157,5 +174,5 @@ app.get("/dashboard", verifyToken, (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT} 🚀`);
 });
