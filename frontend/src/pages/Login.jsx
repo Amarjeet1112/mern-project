@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./Login.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -10,21 +9,28 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/login", {
-        email,
-        password,
+      const res = await fetch("https://mern-project-p7sa.onrender.com/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      // token save
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("email", email);
+      const data = await res.json();
 
-      alert("Login Success ✅");
+      if (res.ok) {
+        // ✅ save token & user
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("email", data.user.email);
 
-      // dashboard redirect
-      navigate("/dashboard");
+        alert("Login Successful 🚀");
+        navigate("/dashboard");
+      } else {
+        alert(data);
+      }
     } catch (err) {
-      alert(err.response?.data || "Login Failed ❌");
+      alert("Server Error");
     }
   };
 
@@ -32,7 +38,6 @@ const Login = () => {
     <div className="main">
       <div className="container">
         
-        {/* LEFT */}
         <div className="left">
           <h2>✨ SYNTH.AI</h2>
 
@@ -53,22 +58,14 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <div className="options">
-            <label>
-              <input type="checkbox" /> Keep me login
-            </label>
-            <span>Forget password?</span>
-          </div>
-
-          {/* 🔥 IMPORTANT */}
           <button onClick={handleLogin}>Login</button>
 
-          <p className="register" onClick={() => navigate("/register")}>
-            Don't have an account? <span>Register</span>
+          <p className="register">
+            Don't have an account?{" "}
+            <span onClick={() => navigate("/register")}>Register</span>
           </p>
         </div>
 
-        {/* RIGHT */}
         <div className="right">
           <h1>What Can I Help You!</h1>
           <p>I'm here to understand your needs.</p>
